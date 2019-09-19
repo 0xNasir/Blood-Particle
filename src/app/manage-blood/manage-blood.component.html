@@ -1,0 +1,83 @@
+<div class="container-fluid">
+  <section class="filter">
+    <mat-form-field floatLabel="never">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter" [(ngModel)]="filter">
+      <button mat-button *ngIf="filter" matSuffix mat-icon-button aria-label="Clear" (click)="setEmptyInSearchField()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <mat-form-field floatLabel="never">
+      <mat-label>Filter By Group</mat-label>
+      <mat-select (selectionChange)="filterByGroup($event.value)">
+        <mat-option *ngFor="let group of bloodGroup" [value]="group">
+          {{group}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field floatLabel="never">
+      <mat-label>Filter By District</mat-label>
+      <mat-select (selectionChange)="filterByDistrict($event.value)">
+        <mat-option *ngFor="let district of districtName" [value]="district">
+          {{district}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </section>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="bloodDonors" matSort class="mat-elevation-z8 table-responsive">
+
+      <!-- ID Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name</th>
+        <td mat-cell *matCellDef="let element"> {{element.donorName}} </td>
+      </ng-container>
+
+      <!-- Progress Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email</th>
+        <td mat-cell *matCellDef="let element"> {{element.donorEmail}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="group">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Group</th>
+        <td mat-cell *matCellDef="let element"> {{element.donorBloodGroup}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="history">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Donation History</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-icon-button color="accent" (click)="viewDonationHistory(element.donorHistory, element.donorName)"><i class="material-icons">
+            remove_red_eye
+          </i></button></td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="district">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> District</th>
+        <td mat-cell *matCellDef="let element"> {{element.donorLocation.donorDistrict}}</td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Address</th>
+        <td mat-cell *matCellDef="let element"> {{element.donorLocation.donorArea}}
+          , {{element.donorLocation.donorDistrict}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Action</th>
+        <td mat-cell *matCellDef="let element"></td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </div>
+
+</div>
